@@ -11,7 +11,7 @@ socket_init() {
 
     int sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
     if (sockfd == -1) {
-        fprintf(stderr, "ft_traceroute: socket: %s\n", strerror(errno));
+        fprintf(stderr, "ft_traceroute: socket: %s: raw socket creation requires root privileges\n", strerror(errno));
         return -1;
     }
 

@@ -116,6 +116,7 @@ icmp_recv_packet(uint8_t *packet, const int sockfd, const uint8_t seq, struct so
             return -1;
         }
 
+        printf("seq: %d, icmp_hdr->icmp_type: %d\n", seq, icmp_hdr->icmp_type);
         if (icmp_hdr->icmp_type == ICMP_TIME_EXCEEDED) {
             printf(" %d  %s (%s)\n", seq, raddr_str, raddr_str);
             return 1;
