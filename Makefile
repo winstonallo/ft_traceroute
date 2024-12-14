@@ -7,7 +7,10 @@ LIBFT_DIR = $(PWD)/libft
 
 BLOCK_SIZE = $(shell stat -fc %s .)
 
-SRCS = traceroute.c
+SRCS = \
+	traceroute.c \
+	socket.c \
+	icmp.c \
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
