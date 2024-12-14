@@ -1,0 +1,6 @@
+# BUILD
+
+ft_traceroute
+obj/
+libft.a
+tests/overrides/out

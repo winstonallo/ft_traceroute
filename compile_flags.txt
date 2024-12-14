@@ -1,0 +1,10 @@
+-Ilibft/src/alloc
+-Ilibft/src/mem
+-Ilibft/src/str
+-Ilibft/src/print
+-Ilibft/src/char
+-Ilibft/src/bit
+-Iinc
+-Wall
+-Wextra
+-Werror
