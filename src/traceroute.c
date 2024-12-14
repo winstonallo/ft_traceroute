@@ -1,4 +1,5 @@
 #include <bits/types/struct_iovec.h>
+#include <errno.h>
 #include <ifaddrs.h>
 #include <mem.h>
 #include <netdb.h>
@@ -8,6 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <traceroute.h>
@@ -65,11 +67,12 @@ main(int ac, char **av) {
             return EXIT_FAILURE;
         }
 
-        if (icmp_send_packet(packet, sockfd, &target_addr) == -1) {
+        if (sendto(sockfd, packet, ICMP_PAYLOAD_SIZE, 0, (struct sockaddr *)&target_addr, sizeof(target_addr)) == -1) {
+            fprintf(stderr, "ft_traceroute: sendto: %s\n", strerror(errno));
             return EXIT_FAILURE;
         }
 
-        int recv_res = icmp_recv_packet(packet, sockfd, seq, &target_addr);
+        int recv_res = icmp_recv_packet(sockfd, seq, &target_addr);
         if (recv_res == -1) {
             return EXIT_FAILURE;
         } else if (recv_res == 0) {

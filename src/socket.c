@@ -1,3 +1,4 @@
+#include <asm-generic/socket.h>
 #include <errno.h>
 #include <netinet/in.h>
 #include <stdbool.h>
@@ -22,7 +23,16 @@ socket_init() {
     const bool option_on = 1;
     if (setsockopt(sockfd, IPPROTO_IP, IP_HDRINCL, &option_on, sizeof(bool)) == -1) {
         close(sockfd);
-        fprintf(stderr, "ft_traceroute: setsockopt: %s\n", strerror(errno));
+        fprintf(stderr, "ft_traceroute: setsockopt (IP_HDRINCL): %s\n", strerror(errno));
+        return -1;
+    }
+
+    struct timeval timeout;
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) == -1) {
+        close(sockfd);
+        fprintf(stderr, "ft_traceroute: setsockopt (SO_RCVTIMEO): %s\n", strerror(errno));
         return -1;
     }
 

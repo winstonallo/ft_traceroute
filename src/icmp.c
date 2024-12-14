@@ -76,20 +76,16 @@ icmp_init_header(uint8_t *packet, const uint8_t seq, const char *const target_ad
     return 0;
 }
 
-int
-icmp_send_packet(uint8_t *packet, const int sockfd, struct sockaddr_in *saddr) {
+// int
+// icmp_send_packet(uint8_t *packet, const int sockfd, struct sockaddr_in *saddr) {
 
-    if (sendto(sockfd, packet, ICMP_PAYLOAD_SIZE, 0, (struct sockaddr *)saddr, sizeof(*saddr)) == -1) {
-        fprintf(stderr, "ft_traceroute: sendto: %s\n", strerror(errno));
-        return -1;
-    }
 
-    return 0;
-}
+
+//     return 0;
+// }
 
 int
-icmp_recv_packet(uint8_t *packet, const int sockfd, const uint8_t seq, struct sockaddr_in *saddr) {
-    (void)packet;
+icmp_recv_packet(const int sockfd, const uint8_t seq, struct sockaddr_in *saddr) {
 
     while (true) {
 
@@ -98,7 +94,6 @@ icmp_recv_packet(uint8_t *packet, const int sockfd, const uint8_t seq, struct so
         socklen_t saddr_len = sizeof(*saddr);
 
         ssize_t recv_len = recvfrom(sockfd, buf, RECV_BUFFER_SIZE, 0, (struct sockaddr *)saddr, &saddr_len);
-        (void)recv_len;
 
         struct iphdr *ip_hdr = (struct iphdr *)buf;
         size_t ip_hdr_len = ip_hdr->ihl << 2;
@@ -116,7 +111,11 @@ icmp_recv_packet(uint8_t *packet, const int sockfd, const uint8_t seq, struct so
             return -1;
         }
 
-        printf("seq: %d, icmp_hdr->icmp_type: %d\n", seq, icmp_hdr->icmp_type);
+        if (icmp_hdr->icmp_type == ICMP_ECHO) {
+
+            printf("icmp_hdr->icmp_type=%d\n", icmp_hdr->icmp_type);
+        }
+
         if (icmp_hdr->icmp_type == ICMP_TIME_EXCEEDED) {
             printf(" %d  %s (%s)\n", seq, raddr_str, raddr_str);
             return 1;
